@@ -25,11 +25,13 @@ export class AuthService {
       } else {
         return userAccount;
       }
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
   async login({ email, password }) {
     try {
-      return await this.account.createEmailPasswordSession(email, password);
+      return await this.account.createEmailSession(email, password);
     } catch (error) {
       throw error;
     }
@@ -38,17 +40,19 @@ export class AuthService {
     try {
       return await this.account.get();
     } catch (error) {
-      console.log("Appwrite service :: getCurrentUser() ::", error);
+      console.log("Appwrite service :: getCurrentUser() :: ", error);
     }
     return null;
   }
   async logout() {
     try {
-      await this.account.deleteSession();
+      await this.account.deleteSessions();
     } catch (error) {
-      onsole.log("Appwrite service :: logout() ::", error);
+      console.log("Appwrite service :: logout() :: ", error);
     }
   }
 }
-const AuthService = new AuthService();
-export default AuthService;
+
+const authService = new AuthService();
+
+export default authService;
